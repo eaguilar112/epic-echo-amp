@@ -34,7 +34,9 @@ export class AudioProvider extends Component {
             first: media.totalCount,
         })
 
-        this.setState({...this.state, dataProvider: dataProvider.cloneWithRows([...audioFiles, media.assets]), audioFiles: [...audioFiles, media.assets]})
+        this.setState({...this.state, 
+            dataProvider: dataProvider.cloneWithRows([...audioFiles, ...media.assets]), 
+            audioFiles: [...audioFiles, ...media.assets]})
     }
 
     getPermission = async () => {

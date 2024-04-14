@@ -6,21 +6,35 @@ import { LayoutProvider, RecyclerListView } from 'recyclerlistview';
 export class AudioList extends Component {
     static contextType = AudioContext;
 
-    layoutProvider = new LayoutProvider((i) => 'audio', (type, dim) => {
-        dim.width = Dimensions.get('window').width;
-        dim.height = 5;
-    })
+    layoutProvider = new LayoutProvider(i => 'audio', (type, dim) => {
+        switch (type) {
+            case 'audio':
+                dim.width = Dimensions.get('window').width;
+                dim.height = 70;
+                break;
+            default: 
+                dim.width = 0;
+                dim.height = 0;
+            }
+        }   
+    );
 
     rowRenderer = (type, item) => {
-        return <Text>{item.filename}</Text>
+        return <AudioList title={item.title} duration={item.duration} />
     }
 
     render() {
-        return <AudioContext.Consumer>
-            {({dataProvider}) => {
-                return <RecyclerListView dataProvider={dataProvider} layoutProvider={this.layoutProvider} rowRenderer={this.rowRenderer} />
+        return (
+            <AudioContext.Consumer>
+            {({ dataProvider }) => {
+                return (
+                    <View style={{flex: 1}}>
+                        <RecyclerListView dataProvider={dataProvider} layoutProvider={this.layoutProvider} rowRenderer={this.rowRenderer} />
+                    </View>
+                );
             }}
-        </AudioContext.Consumer>
+            </AudioContext.Consumer>
+        );
     }
 }
 
