@@ -119,6 +119,7 @@ export class AudioList extends Component {
         return (
             <AudioContext.Consumer>
                 {({ dataProvider, isPlaying }) => {
+                    if(!dataProvider._data.length) return null;
                     return (
                         <Screen>
                             <RecyclerListView 

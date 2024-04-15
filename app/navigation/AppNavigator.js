@@ -3,7 +3,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AudioList from "../screens/AudioList";
 import Playlist from "../screens/Playlist";
 import { Ionicons } from '@expo/vector-icons';
-import { FontAwesome6 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator()

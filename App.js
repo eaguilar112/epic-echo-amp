@@ -1,9 +1,7 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from 'react'
 import {NavigationContainer} from '@react-navigation/native';
 import AppNavigator from './app/navigation/AppNavigator';
 import AudioProvider from './app/appcontext/AudioProvider';
-import AudioListItem from './app/components/AudioListItem';
 
 export default function App() {
     return (

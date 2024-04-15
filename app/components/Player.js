@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet } from 'react-native';
 import { AudioContext } from "../appcontext/AudioProvider";
 import Slider from '@react-native-community/slider';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import PlayerButton from "../components/PlayerButton";
 
 const Player = () => {
@@ -15,6 +14,22 @@ const Player = () => {
             return playbackPosition / playbackDuration;    
         }
         return 0
+    }
+
+    const handlePlayPause = async () => {
+        // play
+        if(context.soundObj === null){
+            const audio = context.currentAudio;
+            const status = await play(context.playbackObj, audio.uri);
+            context.updateState(context, {
+                soundObj: status,
+                currentAudio: audio,
+                isPlaying: true,
+                currentAudioIndex: context.currentAudioIndex,
+            })
+        }
+        // pause
+        // resume
     }
 
     return (
@@ -32,7 +47,7 @@ const Player = () => {
             }
                 <View style={styles.audioController}>
                     <PlayerButton iconType='PREVIOUS'></PlayerButton>
-                    <PlayerButton onPress={() => console.log('playing')} iconType={context.isPlaying ? 'PLAY' : 'PAUSE'}></PlayerButton>
+                    <PlayerButton onPress={handlePlayPause} iconType={context.isPlaying ? 'PLAY' : 'PAUSE'}></PlayerButton>
                     <PlayerButton iconType='NEXT'></PlayerButton>
                 </View>
         </View>

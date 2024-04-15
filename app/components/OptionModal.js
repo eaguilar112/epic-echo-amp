@@ -5,7 +5,7 @@ import color from "../misc/color";
 const OptionModal = ({ visible, currentItem, onClose, onPlayPress, onPlayList }) => {
     const {filename} = currentItem
     return <>
-    <StatusBar hidden />
+    <StatusBar />
     <Modal animationType='fade' transparent visible={visible}>
         <View style={styles.modal}>
             <Text numberOfLines={2} style={styles.title}>{filename}</Text>

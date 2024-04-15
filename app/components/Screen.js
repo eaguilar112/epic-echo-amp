@@ -1,6 +1,5 @@
 import React from "react";
 import { View, StyleSheet, StatusBar } from 'react-native';
-import color from "../misc/color";
 
 const Screen = ({children}) => {
     return (

@@ -2,6 +2,7 @@ import React, { Component, createContext } from "react";
 import { View, StyleSheet, Text, Alert } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import { DataProvider } from 'recyclerlistview';
+import { Audio } from 'expo-av';
 
 export const AudioContext = createContext()
 export class AudioProvider extends Component {
@@ -85,7 +86,10 @@ export class AudioProvider extends Component {
     }
 
     componentDidMount(){
-        this.getPermission()
+        this.getPermission();
+        if(this.state.playbackObj === null) {
+            this.setState({...this.state, playbackObj: new Audio.Sound()});
+        }
     }
 
     updateState = (prevState, newState = {}) => {
@@ -123,7 +127,7 @@ export class AudioProvider extends Component {
                                             playbackPosition, 
                                             playbackDuration,
                                             updateState: this.updateState,
-                                            totalAudioCount: this.totalAudioCount}}>
+                                            totalAudioCount: this.totalAudioCount,}}>
                 {this.props.children}
             </AudioContext.Provider>
         )
