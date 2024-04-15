@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { View, StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
+import React, { useContext, Component } from "react";
+import { StyleSheet, Dimensions } from 'react-native';
 import { AudioContext } from "../appcontext/AudioProvider";
 import { RecyclerListView, LayoutProvider } from 'recyclerlistview';
 import AudioListItem from "../components/AudioListItem";
@@ -7,7 +7,7 @@ import Screen from "../components/Screen";
 import OptionModal from "../components/OptionModal";
 import { Audio } from 'expo-av';
 import { play, pause, resume, playNext } from '../misc/audioController';
-import Slider from '@react-native-community/slider';
+import Player from "../components/Player";
 
 export class AudioList extends Component {
     static contextType = AudioContext
@@ -21,7 +21,16 @@ export class AudioList extends Component {
         this.currentItem = {
 
         }
-    }
+    };
+
+    onPlaybackStatusUpdate = playbackStatus => {
+        if(playbackStatus.isLoaded && playbackStatus.isPlaying){
+            this.context.updateState(this.context, {
+                playbackPosition: playbackStatus.positionMillis,
+                playbackDuration: playbackStatus.durationMillis,
+            })
+        }
+    };
 
     handleAudioPress = async audio => {
         const {soundObj, playbackObj, currentAudio, updateState, audioFiles} = this.context;
@@ -30,7 +39,8 @@ export class AudioList extends Component {
             const playbackObj = new Audio.Sound();
             const status = await play(playbackObj, audio.uri);
             const index = audioFiles.indexOf(audio);
-            return updateState(this.context, {currentAudio: audio, playbackObj: playbackObj, soundObj: status, isPlaying: true, currentAudioIndex: index,});
+            updateState(this.context, {currentAudio: audio, playbackObj: playbackObj, soundObj: status, isPlaying: true, currentAudioIndex: index,});
+            return playbackObj.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate);
         };
 
         // Pause Audio
@@ -92,18 +102,7 @@ export class AudioList extends Component {
                                 rowRenderer={this.rowRenderer} 
                                 extendedState={{isPlaying}}
                             />
-                            <View>
-                                <Text>Currently Playing: Audio File Name</Text>
-                                {
-                                <Slider
-                                style={{width: 200, height: 40}}
-                                minimumValue={0}
-                                maximumValue={1}
-                                minimumTrackTintColor="#FFFFFF"
-                                maximumTrackTintColor="#000000"
-                              />
-                            }
-                            </View>
+                            <Player />
                             <OptionModal onPlayList={() => console.log('Added to Playlist')} onPlayPress={() => console.log('Playing audio')} currentItem={this.currentItem} onClose={() => this.setState({...this.state, optionModalVisible: false }) } visible={this.state.optionModalVisible}/>
                         </Screen>
                     );
@@ -114,12 +113,7 @@ export class AudioList extends Component {
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        justifyContent: 'center',
-        alignContent: 'center',
-        zIndex: 1000,
-    },
+    container:{}
 })
 
 export default AudioList;

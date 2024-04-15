@@ -9,7 +9,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator()
 
 const AppNavigator = () => {
-    return <Tab.Navigator>
+    return <Tab.Navigator screenOptions={{
+        tabBarStyle: { backgroundColor: 'lightblue', paddingBottom: 5, paddingTop: 5,},
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: 'gray',
+    }}>
         <Tab.Screen 
             name='AudioList' 
             component={AudioList} 
