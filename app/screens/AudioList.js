@@ -23,11 +23,36 @@ export class AudioList extends Component {
         }
     };
 
-    onPlaybackStatusUpdate = playbackStatus => {
+    onPlaybackStatusUpdate = async playbackStatus => {
         if(playbackStatus.isLoaded && playbackStatus.isPlaying){
             this.context.updateState(this.context, {
                 playbackPosition: playbackStatus.positionMillis,
                 playbackDuration: playbackStatus.durationMillis,
+            })
+        }
+
+        if(playbackStatus.didJustFinish){
+            const nextAudioIndex = this.context.currentAudioIndex + 1;
+            // If current audio is last or there is no audio file to follow
+            if(nextAudioIndex >= this.context.totalAudioCount){
+                this.context.playbackObj.unloadAsyc();
+                return this.context.updateState(this.context, {
+                    soundObj: null,
+                    currentAudio: this.context.audioFiles[0],
+                    isPlaying: false,
+                    currentAudioIndex: 0,
+                    playbackPosition: null,
+                    playbackDuration: null,
+                });
+            }
+            // Otherwise, select next audio file
+            const audio = this.context.audioFiles[nextAudioIndex];
+            const status = await playNext(this.context.playbackObj, audio.uri);
+            this.context.updateState(this.context, {
+                soundObj: status,
+                currentAudio: audio,
+                isPlaying: true,
+                currentAudioIndex: nextAudioIndex,
             })
         }
     };

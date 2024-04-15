@@ -10,6 +10,8 @@ const Tab = createBottomTabNavigator()
 
 const AppNavigator = () => {
     return <Tab.Navigator screenOptions={{
+        headerStyle: {backgroundColor: 'lightblue', height: 50,},
+        headerTitleAlign: 'center',
         tabBarStyle: { backgroundColor: 'lightblue', paddingBottom: 5, paddingTop: 5,},
         tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
