@@ -7,6 +7,7 @@ import Screen from "../components/Screen";
 import OptionModal from "../components/OptionModal";
 import { Audio } from 'expo-av';
 import { play, pause, resume, playNext } from '../misc/audioController';
+import Slider from '@react-native-community/slider';
 
 export class AudioList extends Component {
     static contextType = AudioContext
@@ -23,30 +24,32 @@ export class AudioList extends Component {
     }
 
     handleAudioPress = async audio => {
-        const {soundObj, playbackObj, currentAudio, updateState} = this.context;
+        const {soundObj, playbackObj, currentAudio, updateState, audioFiles} = this.context;
         // Playing Audio for First Time
         if(soundObj === null) {       
             const playbackObj = new Audio.Sound();
             const status = await play(playbackObj, audio.uri);
-            return updateState(this.context, {currentAudio: audio, playbackObj: playbackObj, soundObj: status,});
+            const index = audioFiles.indexOf(audio);
+            return updateState(this.context, {currentAudio: audio, playbackObj: playbackObj, soundObj: status, isPlaying: true, currentAudioIndex: index,});
         };
 
         // Pause Audio
         if(soundObj.isLoaded && soundObj.isPlaying && currentAudio.id === audio.id){
             const status = await pause(playbackObj);
-            return updateState(this.context, {soundObj: status});
+            return updateState(this.context, {soundObj: status, isPlaying: false,});
         };
 
         // Resume Audio
         if(soundObj.isLoaded && !soundObj.isPlaying && currentAudio.id === audio.id){
             const status = await resume(playbackObj);
-            return updateState(this.context, {soundObj: status});
+            return updateState(this.context, {soundObj: status, isPlaying: true,});
         }
 
         // Select Other Audio
         if(soundObj.isLoaded && currentAudio.id !== audio.id){
             const status = await playNext(playbackObj, audio.uri);
-            return updateState(this.context, {currentAudio: audio, soundObj: status,});
+            const index = audioFiles.indexOf(audio);
+            return updateState(this.context, {currentAudio: audio, soundObj: status, isPlaying: true, currentAudioIndex: index,});
         }
     };
 
@@ -62,10 +65,12 @@ export class AudioList extends Component {
         }
     })
 
-    rowRenderer = (type, item) => {
+    rowRenderer = (type, item, index, extendedState) => {
         return (
             <AudioListItem 
                 title={item.filename} 
+                isPlaying={extendedState.isPlaying}
+                activeListItem={this.context.currentAudioIndex === index}
                 duration={item.duration} 
                 onAudioPress={() => this.handleAudioPress(item)}
                 onOptionPress={() => {
@@ -78,10 +83,27 @@ export class AudioList extends Component {
     render() {
         return (
             <AudioContext.Consumer>
-                {({ dataProvider }) => {
+                {({ dataProvider, isPlaying }) => {
                     return (
                         <Screen>
-                            <RecyclerListView dataProvider={dataProvider} layoutProvider={this.layoutProvider} rowRenderer={this.rowRenderer} />
+                            <RecyclerListView 
+                                dataProvider={dataProvider} 
+                                layoutProvider={this.layoutProvider} 
+                                rowRenderer={this.rowRenderer} 
+                                extendedState={{isPlaying}}
+                            />
+                            <View>
+                                <Text>Currently Playing: Audio File Name</Text>
+                                {
+                                <Slider
+                                style={{width: 200, height: 40}}
+                                minimumValue={0}
+                                maximumValue={1}
+                                minimumTrackTintColor="#FFFFFF"
+                                maximumTrackTintColor="#000000"
+                              />
+                            }
+                            </View>
                             <OptionModal onPlayList={() => console.log('Added to Playlist')} onPlayPress={() => console.log('Playing audio')} currentItem={this.currentItem} onClose={() => this.setState({...this.state, optionModalVisible: false }) } visible={this.state.optionModalVisible}/>
                         </Screen>
                     );
@@ -95,8 +117,9 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         justifyContent: 'center',
-        alignContent: 'center'
-    }
+        alignContent: 'center',
+        zIndex: 1000,
+    },
 })
 
 export default AudioList;
