@@ -13,6 +13,10 @@ export class AudioList extends Component {
         super(props);
         this.state = {
             optionModalVisible: false
+        };
+
+        this.currentItem = {
+
         }
     }
 
@@ -31,7 +35,8 @@ export class AudioList extends Component {
     rowRenderer = (type, item) => {
         return (
             <AudioListItem title={item.filename} duration={item.duration} onOptionPress={() => {
-                console.log('opening option')
+                this.currentItem = item
+                this.setState({...this.state, optionModalVisible: true})
             }}/>
         );
     };
@@ -43,7 +48,7 @@ export class AudioList extends Component {
                     return (
                         <Screen>
                             <RecyclerListView dataProvider={dataProvider} layoutProvider={this.layoutProvider} rowRenderer={this.rowRenderer} />
-                            <OptionModal visible={this.state.optionModalVisible}/>
+                            <OptionModal currentItem={this.currentItem} onClose={() => this.setState({...this.state, optionModalVisible: false }) } visible={this.state.optionModalVisible}/>
                         </Screen>
                     );
                 }}

@@ -1,19 +1,26 @@
 import React from "react";
-import { View, Text, StyleSheet, Modal, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Modal, StatusBar, TouchableWithoutFeedback } from 'react-native';
 import color from "../misc/color";
 
-const OptionModal = ({visible}) => {
+const OptionModal = ({ visible, currentItem, onClose, onPlayPress, onPlayList }) => {
+    const {filename} = currentItem
     return <>
     <StatusBar hidden />
-    <Modal transparent visible={visible}>
+    <Modal animationType='fade' transparent visible={visible}>
         <View style={styles.modal}>
-            <Text numberOfLines={2} style={styles.title}>Dynamic Title of audio is looooooooooooooooooooooooooooooooong</Text>
+            <Text numberOfLines={2} style={styles.title}>{filename}</Text>
             <View style={styles.optionContainer}>
-                <Text style={styles.option}>Play</Text>
-                <Text style={styles.option}>Add to Playlist</Text>
+                <TouchableWithoutFeedback onPress={onPlayPress} >
+                    <Text style={styles.option}>Play</Text>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={onPlayList} >
+                    <Text style={styles.option}>Add to Playlist</Text>
+                </TouchableWithoutFeedback>
             </View>
         </View>
+        <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalBg} />
+        </TouchableWithoutFeedback>
     </Modal>
     </>
 }
