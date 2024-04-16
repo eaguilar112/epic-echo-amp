@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
         left: 0,
-        backgroundColor: color.APP_BG,
+        backgroundColor: 'lightblue',
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         zIndex: 1000,

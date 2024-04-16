@@ -15,7 +15,7 @@ const PlayerButton = ({iconType, size = 40, onPress, }) => {
         }
     }
     return (
-        <AntDesign onPress={onPress} name={getIconName(iconType)} size={size} color='black' />
+        <AntDesign onPress={onPress} name={getIconName(iconType)} size={size} color='white' />
     )
 }
 

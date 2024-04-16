@@ -9,6 +9,7 @@ import { Audio } from 'expo-av';
 import { play, pause, resume, playNext } from '../misc/audioController';
 import Player from "./Player";
 import { storeAudioForNextOpening } from "../misc/helper";
+import * as SecureStore from 'expo-secure-store';
 
 export class AudioList extends Component {
     static contextType = AudioContext
@@ -109,6 +110,7 @@ export class AudioList extends Component {
     rowRenderer = (type, item, index, extendedState) => {
         return (
             <AudioListItem 
+                style={styles.container}
                 title={item.filename} 
                 isPlaying={extendedState.isPlaying}
                 activeListItem={this.context.currentAudioIndex === index}
@@ -134,7 +136,6 @@ export class AudioList extends Component {
                                 rowRenderer={this.rowRenderer} 
                                 extendedState={{isPlaying}}
                             />
-                            <Player/>
                             <OptionModal onPlayList={() => console.log('Added to Playlist')} onPlayPress={() => console.log('Playing audio')} currentItem={this.currentItem} onClose={() => this.setState({...this.state, optionModalVisible: false }) } visible={this.state.optionModalVisible}/>
                         </Screen>
                     );
@@ -145,7 +146,9 @@ export class AudioList extends Component {
 }
 
 const styles = StyleSheet.create({
-    container:{}
+    container:{
+
+    }
 })
 
 export default AudioList;

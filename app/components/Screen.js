@@ -10,7 +10,7 @@ const Screen = ({children}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'lightblue',
+        backgroundColor: '#3030D6',
     }
 })
 

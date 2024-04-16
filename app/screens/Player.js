@@ -19,8 +19,8 @@ const Player = () => {
 
     return (
         <View style={styles.playerContainer}>
-            <Text>{`${context.currentAudioIndex + 1} / ${context.totalAudioCount}`}</Text>
-            <Text numberOfLines={1}>{context.currentAudio.filename}</Text>
+            <Text style={{color: 'white'}}>{`${context.currentAudioIndex + 1} / ${context.totalAudioCount}`}</Text>
+            <Text style={{color: 'white'}} numberOfLines={1}>{context.currentAudio.filename}</Text>
             {
             <Slider
             style={{width: 275, height: 40}}
@@ -28,7 +28,7 @@ const Player = () => {
             maximumValue={1}
             value={calculateSeekBar()}
             minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
+            maximumTrackTintColor="#D3D3D3"
               />
             }
                 <View style={styles.audioController}>
@@ -42,6 +42,7 @@ const Player = () => {
 
 const styles=StyleSheet.create({
     playerContainer: {
+        flex: 1,
         backgroundColor: 'transparent',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -56,6 +57,7 @@ const styles=StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'center',
         gap: 35,
     },
 })
