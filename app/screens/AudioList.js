@@ -7,7 +7,7 @@ import Screen from "../components/Screen";
 import OptionModal from "../components/OptionModal";
 import { Audio } from 'expo-av';
 import { play, pause, resume, playNext } from '../misc/audioController';
-import Player from "../components/Player";
+import Player from "./Player";
 
 export class AudioList extends Component {
     static contextType = AudioContext
@@ -128,7 +128,6 @@ export class AudioList extends Component {
                                 rowRenderer={this.rowRenderer} 
                                 extendedState={{isPlaying}}
                             />
-                            <Player />
                             <OptionModal onPlayList={() => console.log('Added to Playlist')} onPlayPress={() => console.log('Playing audio')} currentItem={this.currentItem} onClose={() => this.setState({...this.state, optionModalVisible: false }) } visible={this.state.optionModalVisible}/>
                         </Screen>
                     );
