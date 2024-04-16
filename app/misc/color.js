@@ -1,9 +1,9 @@
 export default {
     APP_BG: '#fff',
-    FONT: '#303d49',
-    FONT_MEDIUM: '#636363',
-    FONT_LIGHT: '#b6b8b9',
+    FONT: 'white',
+    FONT_MEDIUM: 'lightgray',
+    FONT_LIGHT: '#C0C0C0',
     MODAL_BG: 'rgba(0, 0, 0, 0.2)',
-    ACTIVE_BG: '#5252ad',
-    ACTIVE_FONT: '#fff',
+    ACTIVE_BG: 'darkblue',
+    ACTIVE_FONT: 'white',
 };

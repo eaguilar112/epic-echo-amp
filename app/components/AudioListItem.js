@@ -55,7 +55,6 @@ const AudioListItem = ({ title, duration, onOptionPress, onAudioPress, isPlaying
                     <Entypo onPress={onOptionPress} name="dots-three-vertical" size={20} color={color.FONT_MEDIUM} style={{padding: 10}} />
                 </View>
             </View>
-            <View style={styles.separator}/>
         </>
     );
 };
@@ -65,8 +64,8 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignSelf: 'center',
-        width: width - 80,
-        backgroundColor: 'lightblue',
+        width: width - 40,
+        paddingTop: 15,
     },
     leftContainer: {
         flexDirection: 'row',
@@ -75,7 +74,6 @@ const styles = StyleSheet.create({
     },
     rightContainer: {
         flexBasis: 50,
-        backgroundColor: 'lightblue',
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -83,7 +81,6 @@ const styles = StyleSheet.create({
     thumbnail: {
         height: 50,
         flexBasis: 50,
-        backgroundColor: color.FONT_LIGHT,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 25,
@@ -100,15 +97,6 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 16,
         color: color.FONT,
-    },
-    separator: {
-        width: width - 80,
-        backgroundColor: '#333',
-        opacity: 0.3,
-        height: 0.5,
-        alignSelf: 'center',
-        marginTop: 5,
-        marginBottom: 5,
     },
     timeText: {
         fontSize: 14,
