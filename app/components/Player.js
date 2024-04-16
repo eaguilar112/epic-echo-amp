@@ -3,13 +3,14 @@ import { View, Text, StyleSheet } from 'react-native';
 import { AudioContext } from "../appcontext/AudioProvider";
 import Slider from '@react-native-community/slider';
 import PlayerButton from "../components/PlayerButton";
+import { play, pause, resume, playNext } from '../misc/audioController';
 
 const Player = () => {
     const context = useContext(AudioContext);
 
     const { playbackPosition, playbackDuration, } = context;
 
-    calculateSeebBar = () => {
+    calculateSeekBar = () => {
         if(playbackPosition !== null && playbackDuration !== null){
             return playbackPosition / playbackDuration;    
         }
@@ -21,14 +22,21 @@ const Player = () => {
         if(context.soundObj === null){
             const audio = context.currentAudio;
             const status = await play(context.playbackObj, audio.uri);
-            context.updateState(context, {
+            return context.updateState(context, {
                 soundObj: status,
                 currentAudio: audio,
                 isPlaying: true,
                 currentAudioIndex: context.currentAudioIndex,
-            })
+            });
         }
         // pause
+        if(context.soundObj && context.currentAudioIndex.isPlaying){
+            const status= await pause(context.playbackObj)
+            return context.updateState(context, {
+                soundObj: status,
+                isPlaying: false,
+            });
+        }
         // resume
     }
 
@@ -40,7 +48,7 @@ const Player = () => {
             style={{width: 275, height: 40}}
             minimumValue={0}
             maximumValue={1}
-            value={calculateSeebBar()}
+            value={calculateSeekBar()}
             minimumTrackTintColor="#FFFFFF"
             maximumTrackTintColor="#000000"
               />
