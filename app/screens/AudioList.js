@@ -8,6 +8,7 @@ import OptionModal from "../components/OptionModal";
 import { Audio } from 'expo-av';
 import { play, pause, resume, playNext } from '../misc/audioController';
 import Player from "./Player";
+import { storeAudioForNextOpening } from "../misc/helper";
 
 export class AudioList extends Component {
     static contextType = AudioContext
@@ -33,19 +34,19 @@ export class AudioList extends Component {
 
         if(playbackStatus.didJustFinish){
             const nextAudioIndex = this.context.currentAudioIndex + 1;
-            // If current audio is last or there is no audio file to follow
+            // there is no next audio to play
             if(nextAudioIndex >= this.context.totalAudioCount){
-                this.context.playbackObj.unloadAsyc();
-                return this.context.updateState(this.context, {
+                this.context.playbackObj.unloadAsync();
+                this.context.updateState(this.context, {
                     soundObj: null,
                     currentAudio: this.context.audioFiles[0],
                     isPlaying: false,
                     currentAudioIndex: 0,
                     playbackPosition: null,
                     playbackDuration: null,
-                });
+                })
             }
-            // Otherwise, select next audio file
+            // otherwise, select next audio
             const audio = this.context.audioFiles[nextAudioIndex];
             const status = await playNext(this.context.playbackObj, audio.uri);
             this.context.updateState(this.context, {
@@ -65,7 +66,8 @@ export class AudioList extends Component {
             const status = await play(playbackObj, audio.uri);
             const index = audioFiles.indexOf(audio);
             updateState(this.context, {currentAudio: audio, playbackObj: playbackObj, soundObj: status, isPlaying: true, currentAudioIndex: index,});
-            return playbackObj.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate);
+            playbackObj.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate);
+            return storeAudioForNextOpening(audio, index);
         };
 
         // Pause Audio
@@ -100,6 +102,10 @@ export class AudioList extends Component {
         }
     })
 
+    componentDidMount() {
+        this.context.loadPreviousAudio();
+    }
+
     rowRenderer = (type, item, index, extendedState) => {
         return (
             <AudioListItem 
@@ -128,6 +134,7 @@ export class AudioList extends Component {
                                 rowRenderer={this.rowRenderer} 
                                 extendedState={{isPlaying}}
                             />
+                            <Player/>
                             <OptionModal onPlayList={() => console.log('Added to Playlist')} onPlayPress={() => console.log('Playing audio')} currentItem={this.currentItem} onClose={() => this.setState({...this.state, optionModalVisible: false }) } visible={this.state.optionModalVisible}/>
                         </Screen>
                     );

@@ -10,38 +10,23 @@ const Player = () => {
 
     const { playbackPosition, playbackDuration, } = context;
 
-    calculateSeekBar = () => {
+    const calculateSeekBar = () => {
         if(playbackPosition !== null && playbackDuration !== null){
-            return playbackPosition / playbackDuration;    
+            return playbackPosition / playbackDuration;
         }
         return 0
     }
 
-    const handlePlayPause = async () => {
+    const handlePlayPause = () => {
         // play
-        if(context.soundObj === null){
-            const audio = context.currentAudio;
-            const status = await play(context.playbackObj, audio.uri);
-            return context.updateState(context, {
-                soundObj: status,
-                currentAudio: audio,
-                isPlaying: true,
-                currentAudioIndex: context.currentAudioIndex,
-            });
-        }
+        if(context.soundObj === null)
         // pause
-        if(context.soundObj && context.currentAudioIndex.isPlaying){
-            const status= await pause(context.playbackObj)
-            return context.updateState(context, {
-                soundObj: status,
-                isPlaying: false,
-            });
-        }
         // resume
     }
 
     return (
         <View style={styles.playerContainer}>
+            <Text>{`${context.currentAudioIndex + 1} / ${context.totalAudioCount}`}</Text>
             <Text numberOfLines={1}>{context.currentAudio.filename}</Text>
             {
             <Slider
@@ -55,7 +40,7 @@ const Player = () => {
             }
                 <View style={styles.audioController}>
                     <PlayerButton iconType='PREVIOUS'></PlayerButton>
-                    <PlayerButton onPress={handlePlayPause} iconType={context.isPlaying ? 'PLAY' : 'PAUSE'}></PlayerButton>
+                    <PlayerButton onPress={() => console.log('playing')} iconType={context.isPlaying ? 'PLAY' : 'PAUSE'}></PlayerButton>
                     <PlayerButton iconType='NEXT'></PlayerButton>
                 </View>
         </View>
