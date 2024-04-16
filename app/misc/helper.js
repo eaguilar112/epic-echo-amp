@@ -1,5 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export const storeAudioForNextOpening = async (audio, index) => {
-    AsyncStorage.setItem('previousAudio', JSON.stringify({audio, index}))
+    await SecureStore.setItemAsync('previousAudio', JSON.stringify(data));
 }

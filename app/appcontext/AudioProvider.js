@@ -3,7 +3,8 @@ import { View, StyleSheet, Text, Alert } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import { DataProvider } from 'recyclerlistview';
 import { Audio } from 'expo-av';
-import { AsyncStorage } from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+
 
 export const AudioContext = createContext()
 export class AudioProvider extends Component {
@@ -51,23 +52,30 @@ export class AudioProvider extends Component {
     };
 
     loadPreviousAudio = async () => {
-        let previousAudio = await AsyncStorage.getItem('previousAudio');
-        let currentAudio;
-        let currentAudioIndex;
-
-        if(previousAudio === null){
-            currentAudio = this.state.audioFiles[0];
-            currentAudioIndex = 0;
-
-        }else{
-            JSON.parse(previousAudio);
-            currentAudio = previousAudio.audio;
-            currentAudioIndex = previousAudio.index;
+        try {
+            let previousAudio = await SecureStore.getItemAsync('previousAudio');
+            if (previousAudio !== null) {
+                const parsedPreviousAudio = JSON.parse(previousAudio);
+                const { audio, index } = parsedPreviousAudio;
+                this.setState({
+                    currentAudio: audio,
+                    currentAudioIndex: index
+                });
+            } else {
+                // If there is no previous audio stored
+                const { audioFiles } = this.state;
+                const currentAudio = audioFiles[0] || {};
+                const currentAudioIndex = 0;
+                this.setState({
+                    currentAudio,
+                    currentAudioIndex
+                });
+            }
+        } catch (error) {
+            console.error("Error loading previous audio:", error);
         }
-
-        this.setState({...this.state, currentAudio, currentAudioIndex});
-
     }
+    
 
     getPermission = async () => {
         //{

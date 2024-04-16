@@ -17,13 +17,6 @@ const Player = () => {
         return 0
     }
 
-    const handlePlayPause = () => {
-        // play
-        if(context.soundObj === null)
-        // pause
-        // resume
-    }
-
     return (
         <View style={styles.playerContainer}>
             <Text>{`${context.currentAudioIndex + 1} / ${context.totalAudioCount}`}</Text>
